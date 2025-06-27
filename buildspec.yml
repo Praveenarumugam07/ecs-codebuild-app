@@ -2,12 +2,12 @@ version: 0.2
 
 phases:
   pre_build:
-    commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-      - REPOSITORY_URI=337243655832.dkr.ecr.ap-south-1.amazonaws.com/ecs-codebuild-repo
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  commands:
+    - echo Logging in to Amazon ECR...
+    - aws --version
+    - REPOSITORY_URI=337243655832.dkr.ecr.ap-south-1.amazonaws.com/ecs-codebuild-repo
+    - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
   build:
     commands:
       - echo Building the Docker image...
